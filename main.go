@@ -22,5 +22,7 @@ func main() {
 	})
 
 	quit := make(chan bool)
-	w.Start(quit)
+	done := make(chan bool)
+	w.Start(quit, done)
+	<-done
 }

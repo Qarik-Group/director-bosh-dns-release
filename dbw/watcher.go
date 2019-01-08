@@ -33,12 +33,21 @@ func NewDNSBlobWatcher(c Config) Watcher {
 	}
 }
 
-func (w Watcher) Start(quit chan bool) {
+func (w Watcher) Start(quit chan bool, done chan bool) {
+	err := w.initRecordsFile()
+	if err != nil {
+		w.log.Fatal(err)
+	}
+
+	err = w.findAndUpdateLatestRecords()
+	if err != nil {
+		w.log.Fatal(err)
+	}
+
 	watcher, err := fsnotify.NewWatcher()
 	if err != nil {
 		w.log.Fatal(err)
 	}
-	defer watcher.Close()
 
 	go func() {
 		for {
@@ -52,7 +61,7 @@ func (w Watcher) Start(quit chan bool) {
 					if len(strings.TrimPrefix(event.Name, w.store)) == 3 {
 						err := watcher.Add(event.Name)
 						if err != nil {
-							w.log.Println("error:", err)
+							w.log.Println("err:", err)
 							continue
 						}
 					}
@@ -68,6 +77,7 @@ func (w Watcher) Start(quit chan bool) {
 				}
 				w.log.Println("error:", err)
 			case <-quit:
+				watcher.Close()
 				return
 			}
 		}
@@ -87,10 +97,8 @@ func (w Watcher) Start(quit chan bool) {
 		}
 	}
 
-	err = w.findAndUpdateLatestRecords()
-	if err != nil {
-		w.log.Fatal(err)
-	}
+	done <- true
+	w.log.Println("done")
 }
 
 func (w Watcher) findAndUpdateLatestRecords() error {
@@ -139,12 +147,6 @@ func (w Watcher) findAndUpdateLatestRecords() error {
 	}
 
 	if candidate == nil {
-		w.log.Println("no candidate found, creating empty records file")
-		data := []byte(`{"records":[]}`)
-		err = ioutil.WriteFile(w.records, data, 0644)
-		if err != nil {
-			return err
-		}
 		return nil
 	}
 
@@ -159,5 +161,18 @@ func (w Watcher) findAndUpdateLatestRecords() error {
 		return err
 	}
 
+	return nil
+}
+
+func (w Watcher) initRecordsFile() error {
+	err := os.MkdirAll(filepath.Dir(w.records), 0755)
+	if err != nil {
+		return err
+	}
+	data := []byte(`{"records":[]}`)
+	err = ioutil.WriteFile(w.records, data, 0640)
+	if err != nil {
+		return err
+	}
 	return nil
 }
