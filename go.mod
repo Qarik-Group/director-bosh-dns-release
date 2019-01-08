@@ -2,6 +2,7 @@ module github.com/starkandwayne/bosh-dns-local-fsnotify
 
 require (
 	github.com/fsnotify/fsnotify v1.4.7
+	github.com/google/uuid v1.1.0
 	github.com/onsi/ginkgo v1.7.0
 	github.com/onsi/gomega v1.4.3
 	golang.org/x/net v0.0.0-20181207154023-610586996380 // indirect
