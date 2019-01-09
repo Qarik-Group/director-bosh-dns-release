@@ -1,0 +1,9 @@
+set -e
+mkdir -p "${BOSH_INSTALL_TARGET}/bin"
+source /var/vcap/packages/golang-1.11-linux/bosh/compile.env
+
+export GO111MODULE=on
+pushd director-bosh-dns 
+go build -mod=vendor -o "${BOSH_INSTALL_TARGET}/bin/director-bosh-dns"
+popd 
+

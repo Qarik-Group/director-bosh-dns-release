@@ -1,0 +1,10 @@
+---
+name: director-bosh-dns
+
+templates:
+  ctl: bin/ctl
+
+packages:
+- director-bosh-dns
+
+properties: {}

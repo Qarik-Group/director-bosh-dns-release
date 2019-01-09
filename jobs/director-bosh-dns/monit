@@ -1,0 +1,5 @@
+check process director-bosh-dns
+  with pidfile /var/vcap/sys/run/director-bosh-dns/director-bosh-dns.pid
+  start program "/var/vcap/jobs/director-bosh-dns/bin/ctl start"
+  stop program "/var/vcap/jobs/director-bosh-dns/bin/ctl stop"
+  group vcap

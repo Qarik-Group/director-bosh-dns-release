@@ -1,0 +1,8 @@
+---
+name: director-bosh-dns
+
+dependencies:
+- golang-1.11-linux
+
+files:
+- director-bosh-dns/*
