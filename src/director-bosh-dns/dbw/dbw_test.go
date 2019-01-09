@@ -6,8 +6,8 @@ import (
 	"os"
 	"path/filepath"
 
-	. "github.com/starkandwayne/bosh-dns-local-fsnotify/dbw"
-	. "github.com/starkandwayne/bosh-dns-local-fsnotify/testing"
+	. "github.com/starkandwayne/director-bosh-dns-release/src/director-bosh-dns/dbw"
+	. "github.com/starkandwayne/director-bosh-dns-release/src/director-bosh-dns/testing"
 
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"

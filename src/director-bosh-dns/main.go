@@ -4,7 +4,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/starkandwayne/bosh-dns-local-fsnotify/dbw"
+	"github.com/starkandwayne/director-bosh-dns-release/src/director-bosh-dns/dbw"
 )
 
 const (
