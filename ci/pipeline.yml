@@ -18,7 +18,7 @@ meta:
   url:      (( param "Please specify the full url of the target Concourse CI" ))
   pipeline: (( grab meta.name ))
   manifest:
-    path:   (( concat "manifests/" meta.name ".yml" ))
+    path:   "manifests/director-bosh-dns.yml"
     vars:   "--- {}"
     vars-pr: (( grab meta.manifest.vars ))
     operator_file_paths: "" # comma separated list relative to repo root
