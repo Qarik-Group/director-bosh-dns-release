@@ -31,9 +31,9 @@ instance_groups:
     provides:
       blobstore-address:
         as: blobstore
-      custom_provider_definitions:
-      - name: blobstore-address
-        type: address
+    custom_provider_definitions:
+    - name: blobstore-address
+      type: address
     properties:
       blobstore:
         director:
