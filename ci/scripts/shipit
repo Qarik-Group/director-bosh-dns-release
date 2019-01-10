@@ -46,7 +46,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ###############################################################
 
-cp -r ${REPO_ROOT} ${REPO_OUT}
+cp ${REPO_ROOT}/* ${REPO_OUT}/
+cp ${REPO_ROOT}/.* ${REPO_OUT}/
 
 pushd ${REPO_OUT}
 RELEASE_NAME=$(bosh int config/final.yml --path /name)
