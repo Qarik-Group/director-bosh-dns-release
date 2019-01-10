@@ -7,6 +7,10 @@ releases:
   version: "268.4.0"
   url: "https://bosh.io/d/github.com/cloudfoundry/bosh?v=268.4.0"
   sha1: "b43850fadb8930c945c7107d47adff55abc202ea"
+- name: "bpm"
+  version: "1.0.0"
+  url: "https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=1.0.0"
+  sha1: "42b95d4a0d6d15dd0b0ead62418ffb56208e2307"
 
 stemcells:
 - alias: default
@@ -24,6 +28,8 @@ instance_groups:
   instances: 1
   azs: [z1]
   jobs:
+  - name: bpm
+    release: bpm
   - name: director-bosh-dns
     release: director-bosh-dns
   - name: blobstore
