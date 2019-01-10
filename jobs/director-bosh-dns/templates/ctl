@@ -30,6 +30,12 @@ function create_directories_and_chown_to_vcap() {
   mkdir -p "${RUN_DIR}"
   chown -R vcap:vcap "${RUN_DIR}"
 
+  if [ ! -d /var/vcap/store/blobstore/store ]; then
+    mkdir /var/vcap/store/blobstore/store
+    chown vcap:vcap /var/vcap/store/blobstore/store
+    chmod 700 /var/vcap/store/blobstore/store
+  fi
+
   mkdir -p "${DNS_DIR}"
   touch "${DNS_DIR}/records.json"
   chown -R vcap:vcap "${DNS_DIR}"
