@@ -27,7 +27,7 @@ header() {
 
 delete_deployment() {
 	header "Cleaning up deployment..."
-	# bosh -n delete-deployment --force
+	bosh -n delete-deployment --force
 }
 trap "echo; echo; echo; sleep 10; delete_deployment" EXIT SIGINT SIGTERM
 
