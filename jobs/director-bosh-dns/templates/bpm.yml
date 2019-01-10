@@ -1,7 +1,6 @@
 processes:
 - name: director-bosh-dns
   executable: /var/vcap/packages/director-bosh-dns/bin/director-bosh-dns
+  ephemeral_disk: true
   additional_volumes:
   - path: /var/vcap/store/blobstore/store
-  hooks:
-    pre_start: /var/vcap/jobs/director-bosh-dns/bin/pre-start

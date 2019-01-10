@@ -9,7 +9,7 @@ import (
 
 const (
 	store   = "/var/vcap/store/blobstore/store"
-	records = "/var/vcap/instance/dns/records.json"
+	records = "/var/vcap/data/director-bosh-dns/records.json"
 )
 
 func main() {
