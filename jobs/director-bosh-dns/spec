@@ -3,6 +3,7 @@ name: director-bosh-dns
 
 templates:
   ctl: bin/ctl
+  bpm.yml: config/bpm.yml
 
 packages:
 - director-bosh-dns

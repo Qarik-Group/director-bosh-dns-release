@@ -1,0 +1,8 @@
+processes:
+- name: director-bosh-dns
+  executable: /var/vcap/data/packages/director-bosh-dns/bin/director-bosh-dns
+  additional_volumes:
+  - path: /var/vcap/data/blobstore/store
+  unrestricted_volumes:
+  - path: /var/vcap/instance/dns
+    writable: true
