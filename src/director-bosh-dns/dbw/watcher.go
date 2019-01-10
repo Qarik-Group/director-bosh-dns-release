@@ -108,7 +108,6 @@ func (w Watcher) findAndUpdateLatestRecords() error {
 	if err != nil {
 		return err
 	}
-	fmt.Println()
 
 	for _, f := range files {
 		fi, err := os.Stat(f)
@@ -121,6 +120,8 @@ func (w Watcher) findAndUpdateLatestRecords() error {
 			if err != nil {
 				continue
 			}
+			w.log.Println("file", fi.ModTime(), fi.Name())
+			w.log.Println("cfile", cfi.ModTime(), cfi.Name())
 			if fi.ModTime().Before(cfi.ModTime()) {
 				continue
 			}
@@ -139,6 +140,7 @@ func (w Watcher) findAndUpdateLatestRecords() error {
 
 		fr.Seek(0, 0)
 		contentType := http.DetectContentType(buffer[:n])
+
 		if !strings.Contains(contentType, "text/plain") {
 			continue
 		}

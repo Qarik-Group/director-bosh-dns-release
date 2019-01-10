@@ -15,7 +15,7 @@ import (
 
 var _ = Describe("DNSBlobWatcher", func() {
 	var (
-		store   string
+		store   *BlobStore
 		records string
 		watcher func() Watcher
 		quit    chan bool
@@ -27,8 +27,10 @@ var _ = Describe("DNSBlobWatcher", func() {
 		Expect(err).NotTo(HaveOccurred())
 		records = r.Name()
 
-		store, err = ioutil.TempDir("", "store")
+		storePath, err := ioutil.TempDir("", "store")
 		Expect(err).NotTo(HaveOccurred())
+
+		store = NewBlobStore(storePath)
 
 		log := log.New(GinkgoWriter, "", 0)
 
@@ -37,7 +39,7 @@ var _ = Describe("DNSBlobWatcher", func() {
 
 		watcher = func() Watcher {
 			return NewDNSBlobWatcher(Config{
-				StorePath:   store,
+				StorePath:   store.Store,
 				RecordsPath: records,
 				Logger:      log,
 			})
@@ -46,9 +48,9 @@ var _ = Describe("DNSBlobWatcher", func() {
 
 	Context("given a blobstore without dns blobs", func() {
 		BeforeEach(func() {
-			_, err := WriteTarBlob(store, "blob1")
+			_, err := store.WriteTarBlob("blob1")
 			Expect(err).NotTo(HaveOccurred())
-			_, err = WriteTarBlob(store, "blob2")
+			_, err = store.WriteTarBlob("blob2")
 			Expect(err).NotTo(HaveOccurred())
 		})
 
@@ -66,7 +68,7 @@ var _ = Describe("DNSBlobWatcher", func() {
 			go watcher().Start(quit, done)
 			<-done
 			blob := []byte(`{"records":["last"]}`)
-			_, err := WriteBlob(store, blob)
+			_, err := store.WriteBlob(blob)
 			By("blob written")
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(func() ([]byte, error) {
@@ -99,15 +101,15 @@ var _ = Describe("DNSBlobWatcher", func() {
 		)
 
 		BeforeEach(func() {
-			_, err := WriteBlob(store, []byte(`{"records":["first"]}`))
+			_, err := store.WriteBlob([]byte(`{"records":["first"]}`))
 			Expect(err).NotTo(HaveOccurred())
-			_, err = WriteBlob(store, []byte(`{"records":["second"]}`))
+			_, err = store.WriteBlob([]byte(`{"records":["second"]}`))
 			Expect(err).NotTo(HaveOccurred())
-			lastDNSBlob, err = WriteBlob(store, []byte(`{"records":["last"]}`))
+			lastDNSBlob, err = store.WriteBlob([]byte(`{"records":["last"]}`))
 			Expect(err).NotTo(HaveOccurred())
-			_, err = WriteTarBlob(store, "blob1")
+			_, err = store.WriteTarBlob("blob1")
 			Expect(err).NotTo(HaveOccurred())
-			_, err = WriteTarBlob(store, "blob2")
+			_, err = store.WriteTarBlob("blob2")
 			Expect(err).NotTo(HaveOccurred())
 
 		})
@@ -123,11 +125,11 @@ var _ = Describe("DNSBlobWatcher", func() {
 		})
 
 		It("should watch for dns blobs in existing directories", func() {
-			_, err := WriteBlobInDir(store, "00", []byte(`{"records":["first"]}`))
+			_, err := store.WriteBlobInDir("00", []byte(`{"records":["first"]}`))
 			By("Starting the watcher")
 			go watcher().Start(quit, done)
 			<-done
-			lastDNSBlob, err = WriteBlobInDir(store, "00", []byte(`{"records":["new"]}`))
+			lastDNSBlob, err = store.WriteBlobInDir("00", []byte(`{"records":["new"]}`))
 			rl, err := ioutil.ReadFile(lastDNSBlob)
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(func() ([]byte, error) {
@@ -140,13 +142,13 @@ var _ = Describe("DNSBlobWatcher", func() {
 			go watcher().Start(quit, done)
 			<-done
 			first := []byte(`{"records":["first"]}`)
-			_, err := WriteBlobInDir(store, "00", first)
+			_, err := store.WriteBlobInDir("00", first)
 			Eventually(func() ([]byte, error) {
 				return ioutil.ReadFile(records)
 			}, "5s").Should(MatchJSON(first))
 
 			new := []byte(`{"records":["new"]}`)
-			_, err = WriteBlobInDir(store, "00", new)
+			_, err = store.WriteBlobInDir("00", new)
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(func() ([]byte, error) {
 				return ioutil.ReadFile(records)
@@ -158,7 +160,7 @@ var _ = Describe("DNSBlobWatcher", func() {
 	AfterEach(func() {
 		close(quit)
 		os.Remove(records)
-		os.RemoveAll(store)
+		os.RemoveAll(store.Store)
 
 	})
 })

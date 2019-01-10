@@ -6,33 +6,51 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 
 	"github.com/google/uuid"
 )
 
-func WriteBlobInDir(store string, dir string, data []byte) (string, error) {
+type BlobStore struct {
+	Store       string
+	lastModTime time.Time
+}
+
+func NewBlobStore(store string) *BlobStore {
+	return &BlobStore{
+		Store:       store,
+		lastModTime: time.Now().Add(-time.Hour * 24),
+	}
+}
+
+func (b *BlobStore) WriteBlobInDir(dir string, data []byte) (string, error) {
 	id := uuid.NewSHA1(uuid.Nil, data)
-	err := os.MkdirAll(filepath.Join(store, dir), 0755)
+	err := os.MkdirAll(filepath.Join(b.Store, dir), 0755)
 	if err != nil {
 		return "", err
 	}
 
-	path := filepath.Join(store, dir, id.String())
+	path := filepath.Join(b.Store, dir, id.String())
 	err = ioutil.WriteFile(path, data, 0644)
 	if err != nil {
+		return "", err
+	}
+
+	b.lastModTime = b.lastModTime.Add(time.Second * 2)
+	if err := os.Chtimes(path, b.lastModTime, b.lastModTime); err != nil {
 		return "", err
 	}
 
 	return path, nil
 }
 
-func WriteBlob(store string, data []byte) (string, error) {
+func (b *BlobStore) WriteBlob(data []byte) (string, error) {
 	id := uuid.NewSHA1(uuid.Nil, data)
 	dir := id.String()[0:2]
-	return WriteBlobInDir(store, dir, data)
+	return b.WriteBlobInDir(dir, data)
 }
 
-func WriteTarBlob(store string, data string) (string, error) {
+func (b *BlobStore) WriteTarBlob(data string) (string, error) {
 	var buf bytes.Buffer
 	zw := gzip.NewWriter(&buf)
 
@@ -44,5 +62,5 @@ func WriteTarBlob(store string, data string) (string, error) {
 	if err := zw.Close(); err != nil {
 		return "", err
 	}
-	return WriteBlob(store, buf.Bytes())
+	return b.WriteBlob(buf.Bytes())
 }
