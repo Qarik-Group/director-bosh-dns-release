@@ -6,3 +6,6 @@ dependencies:
 
 files:
 - director-bosh-dns/*
+- director-bosh-dns/dbw/**/*
+- director-bosh-dns/vendor/**/*
+
