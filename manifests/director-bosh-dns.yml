@@ -27,6 +27,7 @@ instance_groups:
 - name: director-bosh-dns
   instances: 1
   azs: [z1]
+  persistent_disk_pool: default
   jobs:
   - name: bpm
     release: bpm
