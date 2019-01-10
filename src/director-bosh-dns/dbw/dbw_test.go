@@ -132,7 +132,7 @@ var _ = Describe("DNSBlobWatcher", func() {
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(func() ([]byte, error) {
 				return ioutil.ReadFile(records)
-			}).Should(MatchJSON(rl))
+			}, "5s").Should(MatchJSON(rl))
 		})
 
 		It("should watch for dns blobs in new directories", func() {
@@ -143,14 +143,14 @@ var _ = Describe("DNSBlobWatcher", func() {
 			_, err := WriteBlobInDir(store, "00", first)
 			Eventually(func() ([]byte, error) {
 				return ioutil.ReadFile(records)
-			}).Should(MatchJSON(first))
+			}, "5s").Should(MatchJSON(first))
 
 			new := []byte(`{"records":["new"]}`)
 			_, err = WriteBlobInDir(store, "00", new)
 			Expect(err).NotTo(HaveOccurred())
 			Eventually(func() ([]byte, error) {
 				return ioutil.ReadFile(records)
-			}).Should(MatchJSON(new))
+			}, "5s").Should(MatchJSON(new))
 		})
 
 	})
