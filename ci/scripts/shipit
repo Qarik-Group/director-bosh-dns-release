@@ -49,13 +49,15 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
 apt-get install git-lfs
 git lfs install
-git clone ${REPO_ROOT} ${REPO_OUT}
+
+GIT_LFS_SKIP_SMUDGE=1 git clone ${REPO_ROOT} ${REPO_OUT}
 
 pushd ${REPO_OUT}
 RELEASE_NAME=$(bosh int config/final.yml --path /name)
 
-header "Pulling in any git submodules..."
-git submodule update --init --recursive --force
+header "Pulling git lfs blobs"
+git remote set-url origin https://github.com/starkandwayne/director-bosh-dns-release.git
+git lfs pull
 
 header "Create final release..."
 bosh -n create-release --final --version "${VERSION}"
