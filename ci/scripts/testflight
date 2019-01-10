@@ -72,7 +72,7 @@ fi
 $DIR/wait-until-proxy-bosh-cf-running
 if [[ "${PROXY_IP:-X}" != "X" ]] ; then export BOSH_ALL_PROXY=socks5://localhost:9999 ; fi
 
-delete_deployment
+# delete_deployment
 
 header "Creating candidate BOSH release..."
 bosh -n reset-release # in case dev_releases/ is in repo accidentally
