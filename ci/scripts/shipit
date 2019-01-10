@@ -46,8 +46,10 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 ###############################################################
 
-cp ${REPO_ROOT}/* ${REPO_OUT}/
-cp ${REPO_ROOT}/.* ${REPO_OUT}/
+curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash
+apt-get install git-lfs
+git lfs install
+git clone ${REPO_ROOT} ${REPO_OUT}
 
 pushd ${REPO_OUT}
 RELEASE_NAME=$(bosh int config/final.yml --path /name)
