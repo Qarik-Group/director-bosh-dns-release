@@ -3,7 +3,7 @@
 BLOBSTORE_DIR=/var/vcap/store/blobstore/store
 
 if [ ! -d "${BLOBSTORE_DIR}" ]; then
-  mkdir "${BLOBSTORE_DIR}"
+  mkdir -p "${BLOBSTORE_DIR}"
   chown vcap:vcap "${BLOBSTORE_DIR}"
   chmod 700 "${BLOBSTORE_DIR}"
 fi
