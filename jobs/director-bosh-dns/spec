@@ -2,9 +2,7 @@
 name: director-bosh-dns
 
 templates:
-  ctl: bin/ctl
   bpm.yml: config/bpm.yml
-  pre-start: bin/pre-start
 
 packages:
 - director-bosh-dns
