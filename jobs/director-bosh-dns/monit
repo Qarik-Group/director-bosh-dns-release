@@ -3,3 +3,4 @@ check process director-bosh-dns
   start program "/var/vcap/jobs/director-bosh-dns/bin/ctl start"
   stop program "/var/vcap/jobs/director-bosh-dns/bin/ctl stop"
   group vcap
+  depends on blobstore_nginx
