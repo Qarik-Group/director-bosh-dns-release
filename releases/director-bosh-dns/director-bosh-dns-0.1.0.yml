@@ -1,0 +1,21 @@
+name: director-bosh-dns
+version: 0.1.0
+commit_hash: f7f443f
+uncommitted_changes: false
+jobs:
+- name: director-bosh-dns
+  version: 99f058d46842d45530504220825b1e5b6ce9f4c5
+  fingerprint: 99f058d46842d45530504220825b1e5b6ce9f4c5
+  sha1: 30954bb256daacfcbb78d95e4c5c343e2eb0c9df
+packages:
+- name: director-bosh-dns
+  version: 2b895d0de42a1c03defc8570e0b0e24ae8776dde
+  fingerprint: 2b895d0de42a1c03defc8570e0b0e24ae8776dde
+  sha1: e6165f890441360ea1a2d77b62a45dbc54c81e28
+  dependencies:
+  - golang-1.11-linux
+- name: golang-1.11-linux
+  version: 1713e92cb48ac5a86a78bb8eba12d69cf05d13382411128a3bd7b748585d22ba
+  fingerprint: 1713e92cb48ac5a86a78bb8eba12d69cf05d13382411128a3bd7b748585d22ba
+  sha1: sha256:36421b78eeeae92b036f4b6097d57d4fd2e08742875ff051fcbdb5985bb4e975
+  dependencies: []

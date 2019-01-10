@@ -2,76 +2,14 @@ name: director-bosh-dns
 
 releases:
 - name: director-bosh-dns
-  version: latest
-- name: "bosh"
-  version: "268.4.0"
-  url: "https://bosh.io/d/github.com/cloudfoundry/bosh?v=268.4.0"
-  sha1: "b43850fadb8930c945c7107d47adff55abc202ea"
-- name: "bpm"
-  version: "1.0.0"
-  url: "https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=1.0.0"
-  sha1: "42b95d4a0d6d15dd0b0ead62418ffb56208e2307"
-
-stemcells:
-- alias: default
-  os: ubuntu-xenial
-  version: latest
-
-update:
-  canaries: 1
-  max_in_flight: 10
-  canary_watch_time: 1000-30000
-  update_watch_time: 1000-30000
-
-instance_groups:
-- name: director-bosh-dns
-  instances: 1
-  azs: [z1]
-  persistent_disk_pool: default
-  jobs:
-  - name: bpm
-    release: bpm
-  - name: director-bosh-dns
-    release: director-bosh-dns
-  - name: blobstore
-    release: bosh
-    provides:
-      blobstore-address:
-        as: blobstore
-    custom_provider_definitions:
-    - name: blobstore-address
-      type: address
-    properties:
-      blobstore:
-        director:
-          user: director
-          password: ((blobstore_director_password))
-        agent:
-          user: agent
-          password: ((blobstore_agent_password))
-        tls:
-          cert:
-            ca: ((blobstore_ca.certificate))
-            certificate: ((blobstore_server_tls.certificate))
-            private_key: ((blobstore_server_tls.private_key))
-  vm_type: default
-  stemcell: default
-  networks:
-  - name: default
-
-variables:
-- name: blobstore_director_password
-  type: password
-- name: blobstore_agent_password
-  type: password
-- name: blobstore_ca
-  type: certificate
-  options:
-    is_ca: true
-    common_name: default.blobstore-ca.bosh-internal
-- name: blobstore_server_tls
-  type: certificate
-  options:
-    ca: blobstore_ca
-  consumes:
-    common_name: { from: blobstore }
+  sha1: a365141b2204233fca76c6d97ca85ff6805e2b33
+  url: https://github.com/starkandwayne/director-bosh-dns-boshrelease/releases/download/v0.1.0/director-bosh-dns-0.1.0.tgz
+  version: 0.1.0
+- name: bosh
+  sha1: b43850fadb8930c945c7107d47adff55abc202ea
+  url: https://bosh.io/d/github.com/cloudfoundry/bosh?v=268.4.0
+  version: 268.4.0
+- name: bpm
+  sha1: 42b95d4a0d6d15dd0b0ead62418ffb56208e2307
+  url: https://bosh.io/d/github.com/cloudfoundry-incubator/bpm-release?v=1.0.0
+  version: 1.0.0
