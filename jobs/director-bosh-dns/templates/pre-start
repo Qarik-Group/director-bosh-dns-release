@@ -1,9 +1,15 @@
 #!/bin/bash -exu
 
-BLOBSTORE_DIR=/var/vcap/store/blobstore/store
+DNS_DIR=/var/vcap/instance/dns
+RECORDS_FILE="${DNS_DIR}/records.json"
 
-if [ ! -d "${BLOBSTORE_DIR}" ]; then
-  mkdir -p "${BLOBSTORE_DIR}"
-  chown vcap:vcap "${BLOBSTORE_DIR}"
-  chmod 700 "${BLOBSTORE_DIR}"
+if [ ! -d "${DNS_DIR}" ]; then
+  mkdir -p "${DNS_DIR}"
 fi
+
+if [ ! -f "${RECORDS_FILE}" ]; then
+    touch "${RECORDS_FILE}"
+fi
+
+chown root:vcap "${RECORDS_FILE}"
+chmod 660 "${RECORDS_FILE}"
