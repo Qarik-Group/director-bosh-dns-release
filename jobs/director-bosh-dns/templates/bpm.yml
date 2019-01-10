@@ -2,7 +2,11 @@ processes:
 - name: director-bosh-dns
   executable: /var/vcap/packages/director-bosh-dns/bin/director-bosh-dns
   unsafe: { privileged: true }
+  additional_volumes:
+  - path: /var/vcap/data/blobstore
+    writable: true
   unrestricted_volumes:
   - path: /var/vcap/instance/dns
     writable: true
-  - path: /var/vcap/data/blobstore/store
+  hooks:
+    pre_start: /var/vcap/jobs/director-bosh-dns/bin/pre-start

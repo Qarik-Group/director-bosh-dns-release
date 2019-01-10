@@ -1,0 +1,9 @@
+#!/bin/bash -exu
+
+BLOBSTORE_DIR=/var/vcap/store/blobstore/store
+
+if [ ! -d "${BLOBSTORE_DIR}" ]; then
+  mkdir "${BLOBSTORE_DIR}"
+  chown vcap:vcap "${BLOBSTORE_DIR}"
+  chmod 700 "${BLOBSTORE_DIR}"
+fi
