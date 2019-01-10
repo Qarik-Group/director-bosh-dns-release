@@ -1,4 +1,5 @@
 name: director-bosh-dns
+final_name: director-bosh-dns
 blobstore:
   provider: local
   options:
