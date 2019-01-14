@@ -67,7 +67,7 @@ popd
 
 RELEASE_TGZ=$REPO_OUT/releases/$RELEASE_NAME/$RELEASE_NAME-$VERSION.tgz
 export RELEASE_SHA1=$(sha1sum $RELEASE_TGZ | head -n1 | awk '{print $1}')
-export RELEASE_URL="https://github.com/${GITHUB_OWNER}/${RELEASE_NAME}-boshrelease/releases/download/v${VERSION}/${RELEASE_NAME}-${VERSION}.tgz"
+export RELEASE_URL="https://github.com/${GITHUB_OWNER}/${RELEASE_NAME}-release/releases/download/v${VERSION}/${RELEASE_NAME}-${VERSION}.tgz"
 echo "RELEASE_SHA1=$RELEASE_SHA1"
 
 mkdir -p ${RELEASE_ROOT}/artifacts
